@@ -1,46 +1,110 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>Student Attendance System</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-
 <body>
 
-<h1>Student Attendance System</h1>
+
+<div class="layout">
 
 
-<h2>Add Student</h2>
+    <!-- SIDEBAR -->
 
-<input id="name" placeholder="Name">
-<input id="roll" placeholder="Roll">
-<input id="department" placeholder="Department">
-
-<button onclick="addStudent()">Add Student</button>
+    <div class="sidebar">
 
 
-<h2>Students</h2>
+        <h2>College App</h2>
 
-<table border="1">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Roll</th>
-            <th>Department</th>
-        </tr>
-    </thead>
 
-    <tbody id="studentTable">
+        <ul>
 
-    </tbody>
+            <li>🏠 Dashboard</li>
 
-</table>
+            <li>👨‍🎓 Students</li>
+
+            <li>📋 Attendance</li>
+
+            <li>⚙ Settings</li>
+
+        </ul>
+
+
+    </div>
+
+
+
+    <!-- MAIN CONTENT -->
+
+
+    <div class="main">
+
+
+        <h1>Student Dashboard</h1>
+
+
+
+        <div class="cards">
+
+
+            <div class="card">
+
+                <h2>Total Students</h2>
+
+                <p id="studentCount">0</p>
+
+            </div>
+
+
+
+            <div class="card">
+
+                <h2>Present Today</h2>
+
+                <p>0</p>
+
+            </div>
+
+
+
+            <div class="card">
+
+                <h2>Absent Today</h2>
+
+                <p>0</p>
+
+            </div>
+
+
+
+            <div class="card">
+
+                <h2>Total Attendance</h2>
+
+                <p>0</p>
+
+            </div>
+
+
+        </div>
+
+
+
+        <br><br>
+
+
+
+        <button onclick="location.href='addstudent.html'">
+
+            + Add Student
+
+        </button>
+
+
+
+    </div>
+
+
+
+</div>
 
 
 <script src="script.js"></script>
 
-</body>
 
-</html>
+</body>

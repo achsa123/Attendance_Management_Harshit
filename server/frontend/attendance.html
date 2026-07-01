@@ -1,229 +1,179 @@
 <!DOCTYPE html>
 <html>
 
-
 <head>
 
-<title>Attendance</title>
+    <title>Mark Attendance</title>
 
-<link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 </head>
 
-
-
 <body>
 
+<div class="layout">
 
+    <div class="sidebar">
 
-<div class="main">
+        <h2>College App</h2>
 
+        <ul>
 
-<h1>Mark Attendance</h1>
+            <li onclick="location.href='dashboard.html'">
+                <i class="fa-solid fa-house"></i>
+                Dashboard
+            </li>
 
+            <li onclick="location.href='add-student.html'">
+                <i class="fa-solid fa-user-plus"></i>
+                Add Student
+            </li>
 
+            <li onclick="location.href='view-students.html'">
+                <i class="fa-solid fa-users"></i>
+                View Students
+            </li>
 
-<table>
+            <li onclick="location.href='attendance.html'">
+                <i class="fa-solid fa-clipboard-check"></i>
+                Attendance
+            </li>
 
+            <li onclick="location.href='attendance-history.html'">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                Attendance History
+            </li>
 
-<thead>
+        </ul>
 
+    </div>
 
-<tr>
+    <div class="main">
 
-<th>Student ID</th>
-<th>Name</th>
-<th>Department</th>
-<th>Status</th>
+        <h1>Mark Attendance</h1>
 
-</tr>
+        <table>
 
+            <thead>
 
-</thead>
+                <tr>
 
+                    <th>Student ID</th>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>Attendance</th>
 
-<tbody id="attendanceTable">
+                </tr>
 
+            </thead>
 
-</tbody>
+            <tbody id="attendanceTable">
 
+            </tbody>
 
-</table>
+        </table>
 
-
+    </div>
 
 </div>
 
-
-
-
 <script>
 
-
-
-let students=[];
-
-
+let students = [];
 
 fetch("http://localhost:5000/students")
+.then(res => res.json())
+.then(data => {
 
+    students = data;
 
-.then(res=>res.json())
-
-
-.then(data=>{
-
-
-students=data;
-
-
-displayStudents();
-
+    displayStudents();
 
 });
 
+function displayStudents() {
 
+    let table = document.getElementById("attendanceTable");
 
+    table.innerHTML = "";
 
+    students.forEach(student => {
 
+        table.innerHTML += `
 
+        <tr>
 
-function displayStudents(){
+            <td>${student.student_id}</td>
 
+            <td>${student.full_name}</td>
 
+            <td>${student.department}</td>
 
-let table=document.getElementById("attendanceTable");
+            <td>
 
+                <button onclick="markAttendance('${student.student_id}','Present')">
 
+                    ✅ Present
 
-students.forEach(student=>{
+                </button>
 
+                <button onclick="markAttendance('${student.student_id}','Absent')">
 
-table.innerHTML += `
+                    ❌ Absent
 
+                </button>
 
+            </td>
 
-<tr>
+        </tr>
 
+        `;
 
-<td>${student.student_id}</td>
-
-
-<td>${student.full_name}</td>
-
-
-<td>${student.department}</td>
-
-
-<td>
-
-
-
-<button onclick="markAttendance('${student.student_id}','Present')">
-
-Present
-
-</button>
-
-
-
-<button onclick="markAttendance('${student.student_id}','Absent')">
-
-Absent
-
-</button>
-
-
-
-</td>
-
-
-</tr>
-
-
-
-`;
-
-
-
-});
-
-
+    });
 
 }
-
-
-
-
-
-
-
 
 function markAttendance(id,status){
 
+    let today = new Date().toISOString().split("T")[0];
 
+    fetch("http://localhost:5000/attendance",{
 
-let today = new Date()
-.toISOString()
-.split("T")[0];
+        method:"POST",
 
+        headers:{
 
+            "Content-Type":"application/json"
 
-fetch("http://localhost:5000/attendance",{
+        },
 
+        body:JSON.stringify({
 
-method:"POST",
+            student_id:id,
 
+            date:today,
 
-headers:{
+            status:status
 
+        })
 
-"Content-Type":"application/json"
+    })
 
+    .then(res=>res.json())
 
-},
+    .then(data=>{
 
+        alert(data.message);
 
-body:JSON.stringify({
-
-
-student_id:id,
-
-
-date:today,
-
-
-status:status
-
-
-})
-
-
-})
-
-
-.then(res=>res.json())
-
-
-.then(data=>{
-
-
-alert(data.message);
-
-
-});
-
+    });
 
 }
 
-
-
 </script>
 
-
-
-
 </body>
-
 
 </html>

@@ -3,12 +3,12 @@
 
 <head>
 
-    <title>View Students</title>
+    <title>Export Attendance</title>
 
     <link rel="stylesheet" href="style.css">
 
     <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 </head>
 
@@ -47,53 +47,68 @@
                 Attendance History
             </li>
 
+            <li onclick="location.href='export.html'">
+                <i class="fa-solid fa-file-csv"></i>
+                Export CSV
+            </li>
+
         </ul>
 
     </div>
 
     <div class="main">
 
-        <h1>Students</h1>
+        <h1>Export Attendance</h1>
 
-        <input
-            type="text"
-            id="search"
-            placeholder="🔍 Search Student..."
-            onkeyup="searchStudents()">
+        <p>Download all attendance records as a CSV file.</p>
 
-        <br><br>
+        <button onclick="exportCSV()">
 
-        <table>
+            <i class="fa-solid fa-download"></i>
 
-            <thead>
+            Export Attendance CSV
 
-                <tr>
-
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Department</th>
-                    <th>Semester</th>
-                    <th>DOB</th>
-                    <th>Gender</th>
-                    <th>Actions</th>
-
-                </tr>
-
-            </thead>
-
-            <tbody id="studentTable">
-
-            </tbody>
-
-        </table>
+        </button>
 
     </div>
 
 </div>
 
-<script src="studentview.js"></script>
+<script>
+
+function exportCSV(){
+
+    fetch("http://localhost:5000/attendance")
+
+    .then(res => res.json())
+
+    .then(data => {
+
+        let csv = "Date,Student ID,Status\n";
+
+        data.forEach(row => {
+
+            csv += `${row.date},${row.student_id},${row.status}\n`;
+
+        });
+
+        let blob = new Blob([csv], { type: "text/csv" });
+
+        let url = URL.createObjectURL(blob);
+
+        let a = document.createElement("a");
+
+        a.href = url;
+
+        a.download = "attendance.csv";
+
+        a.click();
+
+    });
+
+}
+
+</script>
 
 </body>
 

@@ -1,68 +1,127 @@
-body{
-    margin:0;
-    font-family:Arial, sans-serif;
-    background:#f4f6f9;
-}
 
+.layout{
 
-.dashboard{
     display:flex;
+
     min-height:100vh;
+
 }
 
 
-/* Sidebar */
+
+/* SIDEBAR */
+
 
 .sidebar{
 
+
     width:230px;
+
     background:#1e293b;
+
     color:white;
-    padding:25px;
+
+    padding:30px;
+
 
 }
+
 
 
 .sidebar h2{
 
     text-align:center;
 
+    margin-bottom:40px;
+
 }
 
 
-.sidebar button{
 
-    width:100%;
-    padding:12px;
+.sidebar ul{
+
+    list-style:none;
+
+    padding:0;
+
+}
+
+
+
+.sidebar li{
+
+    padding:15px;
+
     margin:10px 0;
-    border:none;
-    border-radius:8px;
+
+    border-radius:10px;
+
     cursor:pointer;
-    font-size:15px;
 
 }
 
 
 
-/* Dashboard */
+.sidebar li:hover{
+
+    background:#2563eb;
+
+}
+
+
+
+/* MAIN AREA */
+
 
 .main{
 
     flex:1;
+
     padding:40px;
-    text-align:center;
+
+}
+
+
+body{
+
+    margin:0;
+    font-family:"Segoe UI", Arial, sans-serif;
+    background:#f4f6f9;
+
+}
+
+
+/* DASHBOARD LAYOUT */
+
+.main{
+
+    width:85%;
+    margin:auto;
+    padding:40px;
 
 }
 
 
 
+/* TITLE */
+
+h1{
+
+    text-align:center;
+    color:#1e293b;
+    margin-bottom:40px;
+
+}
+
+
+
+/* CARDS */
+
 .cards{
 
-    display:flex;
-    justify-content:center;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
     gap:25px;
-    margin-top:40px;
-    flex-wrap:wrap;
 
 }
 
@@ -71,10 +130,32 @@ body{
 .card{
 
     background:white;
-    width:220px;
-    padding:25px;
-    border-radius:15px;
-    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+    padding:35px;
+    text-align:center;
+
+    border-radius:18px;
+
+    box-shadow:
+    0 8px 20px rgba(0,0,0,0.08);
+
+    transition:0.3s;
+
+}
+
+
+
+.card:hover{
+
+    transform:translateY(-5px);
+
+}
+
+
+
+.card h2{
+
+    color:#475569;
+    font-size:20px;
 
 }
 
@@ -82,82 +163,204 @@ body{
 
 .card p{
 
-    font-size:32px;
-    font-weight:bold;
+    color:#2563eb;
+    font-size:42px;
+    font-weight:700;
 
 }
 
 
 
-/* Add Student Form */
-
-form{
-
-    background:white;
-    width:400px;
-    margin:40px auto;
-    padding:30px;
-    border-radius:15px;
-    box-shadow:0 5px 15px rgba(0,0,0,0.2);
-
-}
+/* TABLE DESIGN */
 
 
-
-form input,
-form select{
-
-    width:90%;
-    padding:12px;
-    margin:10px;
-    border:1px solid #ccc;
-    border-radius:8px;
-
-}
-
-
-
-form button{
-
-    padding:12px 30px;
-    background:#1e293b;
-    color:white;
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
-
-}
 table{
 
-width:90%;
-margin:30px auto;
-border-collapse:collapse;
-background:white;
+    width:100%;
+
+    border-collapse:collapse;
+
+    background:white;
+
+    margin-top:30px;
+
+    border-radius:15px;
+
+    overflow:hidden;
+
+    box-shadow:
+    0 8px 20px rgba(0,0,0,0.08);
 
 }
 
-
-th,td{
-
-padding:15px;
-border:1px solid #ddd;
-
-}
 
 
 th{
 
-background:#1e293b;
-color:white;
+    background:#2563eb;
+
+    color:white;
+
+    padding:15px;
 
 }
 
 
-td button{
 
-padding:8px;
-border:none;
-border-radius:5px;
-cursor:pointer;
+td{
+
+    padding:15px;
+
+    text-align:center;
+
+    border-bottom:1px solid #eee;
+
+}
+
+
+
+tr:hover{
+
+    background:#f8fafc;
+
+}
+
+
+
+/* BUTTONS */
+
+
+button{
+
+    background:#2563eb;
+
+    color:white;
+
+    padding:10px 18px;
+
+    border:none;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-size:14px;
+
+}
+
+
+
+button:hover{
+
+    background:#1d4ed8;
+
+}
+
+
+
+/* FORM STYLE */
+
+
+input{
+
+    width:90%;
+
+    padding:12px;
+
+    margin:10px;
+
+    border:1px solid #ddd;
+
+    border-radius:10px;
+
+}
+
+
+
+form{
+
+    background:white;
+
+    padding:30px;
+
+    border-radius:15px;
+
+    width:400px;
+
+    margin:auto;
+
+    box-shadow:
+    0 8px 20px rgba(0,0,0,0.1);
+
+}
+
+
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+
+.cards{
+
+    grid-template-columns:repeat(2,1fr);
+
+}
+
+
+}
+
+
+@media(max-width:500px){
+
+
+.cards{
+
+    grid-template-columns:1fr;
+
+}
+
+
+}
+.sidebar{
+
+    position:fixed;
+    left:0;
+    top:0;
+    width:230px;
+    height:100vh;
+    background:#1f2937;
+    padding-top:20px;
+
+}
+
+.sidebar h2{
+
+    color:white;
+    text-align:center;
+    margin-bottom:30px;
+
+}
+
+.sidebar a{
+
+    display:block;
+    color:white;
+    text-decoration:none;
+    padding:15px 25px;
+    font-size:18px;
+
+}
+
+.sidebar a:hover{
+
+    background:#374151;
+
+}
+
+.main{
+
+    margin-left:250px;
+    padding:30px;
 
 }
