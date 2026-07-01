@@ -3,7 +3,8 @@
 
 <head>
 
-<title>Student Attendance System</title>
+<title>Dashboard</title>
+
 <link rel="stylesheet" href="style.css">
 
 </head>
@@ -12,111 +13,139 @@
 <body>
 
 
-<div class="dashboard">
-
-
-<div class="sidebar">
-
-
-<h2>College App</h2>
-
-
-<button onclick="location.href='dashboard.html'">
-Dashboard
-</button>
-
-
-<button onclick="location.href='add-student.html'">
-Add Student
-</button>
-
-
-<button onclick="location.href='view-students.html'">
-View Students
-</button>
-
-
-<button>
-Attendance
-</button>
-
-
-<button>
-Reports
-</button>
-
-
-</div>
-
-
-
-
-
 <div class="main">
 
 
 <h1>Student Attendance Dashboard</h1>
 
 
-
 <div class="cards">
 
 
-
 <div class="card">
 
-<h3>Total Students</h3>
+<h2>Total Students</h2>
 
-<p>120</p>
-
-</div>
-
-
-
-
-<div class="card">
-
-<h3>Present Today</h3>
-
-<p>98</p>
+<p id="totalStudents">0</p>
 
 </div>
-
-
 
 
 
 <div class="card">
 
-<h3>Absent Today</h3>
+<h2>Present Today</h2>
 
-<p>22</p>
+<p id="presentToday">0</p>
 
 </div>
-
-
 
 
 
 <div class="card">
 
-<h3>Attendance %</h3>
+<h2>Absent Today</h2>
 
-<p>92%</p>
-
-</div>
-
-
+<p id="absentToday">0</p>
 
 </div>
 
 
 
+<div class="card">
+
+<h2>Total Attendance</h2>
+
+<p id="totalAttendance">0</p>
+
+</div>
+
+
+</div>
+
+
 </div>
 
 
 
-</div>
+<script>
+
+
+let today = new Date()
+.toISOString()
+.split("T")[0];
+
+
+
+// Students count
+
+fetch("http://localhost:5000/students")
+
+.then(res=>res.json())
+
+.then(data=>{
+
+
+document.getElementById("totalStudents").innerHTML = data.length;
+
+
+});
+
+
+
+
+// Attendance stats
+
+fetch("http://localhost:5000/attendance")
+
+.then(res=>res.json())
+
+.then(data=>{
+
+
+document.getElementById("totalAttendance").innerHTML=data.length;
+
+
+let present=0;
+
+let absent=0;
+
+
+
+data.forEach(record=>{
+
+
+if(record.date === today){
+
+
+if(record.status==="Present")
+
+present++;
+
+
+if(record.status==="Absent")
+
+absent++;
+
+
+}
+
+
+});
+
+
+
+document.getElementById("presentToday").innerHTML=present;
+
+
+document.getElementById("absentToday").innerHTML=absent;
+
+
+
+});
+
+
+</script>
 
 
 
