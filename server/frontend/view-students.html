@@ -4,6 +4,7 @@
 <head>
 
 <title>View Students</title>
+
 <link rel="stylesheet" href="style.css">
 
 </head>
@@ -18,43 +19,28 @@
 <h1>Students List</h1>
 
 
-<div class="filters">
+
+<div id="editBox" style="display:none;">
 
 
-<input 
-type="text" 
-id="search"
-placeholder="Search by ID or Name"
->
+<h2>Edit Student</h2>
 
 
-<select id="department">
-
-<option value="">All Departments</option>
-<option value="CSE">CSE</option>
-<option value="ECE">ECE</option>
-<option value="EEE">EEE</option>
-
-</select>
+<input id="editName" placeholder="Name">
 
 
+<button onclick="updateStudent()">
+Save
+</button>
 
-<select id="semester">
 
-<option value="">All Semester</option>
-<option value="1">1</option>
-<option value="2">2</option>
-<option value="3">3</option>
-<option value="4">4</option>
-<option value="5">5</option>
-<option value="6">6</option>
-<option value="7">7</option>
-<option value="8">8</option>
-
-</select>
+<button onclick="closeEdit()">
+Cancel
+</button>
 
 
 </div>
+
 
 
 
@@ -65,7 +51,7 @@ placeholder="Search by ID or Name"
 
 <tr>
 
-<th>Student ID</th>
+<th>ID</th>
 <th>Name</th>
 <th>Department</th>
 <th>Semester</th>
@@ -75,15 +61,10 @@ placeholder="Search by ID or Name"
 
 </tr>
 
-
 </thead>
 
 
-
-<tbody id="studentTable">
-
-
-</tbody>
+<tbody id="studentTable"></tbody>
 
 
 </table>
@@ -93,10 +74,18 @@ placeholder="Search by ID or Name"
 
 
 
+
+
 <script>
 
 
-let students = [];
+let students=[];
+
+let selectedId=null;
+
+
+
+function loadStudents(){
 
 
 fetch("http://localhost:5000/students")
@@ -108,17 +97,21 @@ fetch("http://localhost:5000/students")
 .then(data=>{
 
 
-students = data;
+students=data;
 
-displayStudents(students);
+
+displayStudents();
 
 
 });
 
 
+}
 
 
-function displayStudents(data){
+
+
+function displayStudents(){
 
 
 let table=document.getElementById("studentTable");
@@ -128,7 +121,7 @@ table.innerHTML="";
 
 
 
-data.forEach(student=>{
+students.forEach(student=>{
 
 
 table.innerHTML += `
@@ -139,22 +132,36 @@ table.innerHTML += `
 
 <td>${student.student_id}</td>
 
+
 <td>${student.full_name}</td>
+
 
 <td>${student.department}</td>
 
+
 <td>${student.semester}</td>
 
+
 <td>${student.email}</td>
+
 
 <td>${student.phone}</td>
 
 
+
 <td>
 
-<button>Edit</button>
 
-<button>Delete</button>
+<button onclick="editStudent(${student.id})">
+Edit
+</button>
+
+
+
+<button onclick="deleteStudent(${student.id})">
+Delete
+</button>
+
 
 
 </td>
@@ -174,64 +181,150 @@ table.innerHTML += `
 
 
 
-document.getElementById("search").addEventListener("keyup",filter);
+
+
+function editStudent(id){
+
+
+let student=students.find(s=>s.id==id);
 
 
 
-document.getElementById("department").addEventListener("change",filter);
+selectedId=id;
 
 
 
-document.getElementById("semester").addEventListener("change",filter);
+document.getElementById("editBox").style.display="block";
 
 
+document.getElementById("editName").value=
+student.full_name;
 
 
-function filter(){
-
-
-let search =
-document.getElementById("search").value.toLowerCase();
-
-
-let dept =
-document.getElementById("department").value;
-
-
-let sem =
-document.getElementById("semester").value;
+}
 
 
 
 
-let result = students.filter(student=>{
 
 
-return (
-
-(student.student_id.toString().includes(search) ||
-student.full_name.toLowerCase().includes(search))
-
-&&
-
-(dept=="" || student.department==dept)
-
-&&
-
-(sem=="" || student.semester==sem)
+function updateStudent(){
 
 
-);
+
+let name=document.getElementById("editName").value;
+
+
+
+fetch(
+"http://localhost:5000/students/"+selectedId,
+
+{
+
+
+method:"PUT",
+
+
+headers:{
+
+
+"Content-Type":"application/json"
+
+
+},
+
+
+body:JSON.stringify({
+
+
+full_name:name
+
+
+})
+
+
+})
+
+
+
+.then(res=>res.json())
+
+
+.then(data=>{
+
+
+alert(data.message);
+
+
+closeEdit();
+
+
+loadStudents();
 
 
 });
 
 
+}
 
-displayStudents(result);
+
+
+
+
+function closeEdit(){
+
+
+document.getElementById("editBox")
+.style.display="none";
 
 
 }
+
+
+
+
+
+
+
+function deleteStudent(id){
+
+
+fetch(
+
+"http://localhost:5000/students/"+id,
+
+{
+
+
+method:"DELETE"
+
+
+})
+
+
+.then(res=>res.json())
+
+
+.then(data=>{
+
+
+alert(data.message);
+
+
+loadStudents();
+
+
+});
+
+
+}
+
+
+
+
+
+loadStudents();
+
 
 
 </script>

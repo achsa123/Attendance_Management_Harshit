@@ -1,6 +1,5 @@
 const express = require("express");
 const cors = require("cors");
-
 const db = require("./database");
 
 const app = express();
@@ -9,99 +8,211 @@ app.use(cors());
 app.use(express.json());
 
 
-// TEST ROUTE
 
-app.get("/", (req, res) => {
-    res.send("Student Attendance System Running");
+// HOME
+
+app.get("/", (req,res)=>{
+
+res.send("Student Attendance System Running");
+
 });
+
+
+
+
+
+// GET STUDENTS
+
+app.get("/students",(req,res)=>{
+
+
+db.all(
+
+"SELECT * FROM students",
+
+[],
+
+(err,rows)=>{
+
+
+if(err){
+
+return res.json({
+
+error:err.message
+
+});
+
+}
+
+
+res.json(rows);
+
+
+});
+
+
+});
+
+
+
+
+
 
 
 // ADD STUDENT
 
-app.post("/students", (req, res) => {
 
-    const {
-        student_id,
-        full_name,
-        email,
-        phone,
-        department,
-        semester,
-        dob,
-        gender
-    } = req.body;
+app.post("/students",(req,res)=>{
 
 
-    const sql = `
-    INSERT INTO students
-    (student_id, full_name, email, phone, department, semester, dob, gender)
-
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    `;
+const {
 
 
-    db.run(
-        sql,
-        [
-            student_id,
-            full_name,
-            email,
-            phone,
-            department,
-            semester,
-            dob,
-            gender
-        ],
-
-        function(err){
-
-            if(err){
-                return res.status(400).json({
-                    error: err.message
-                });
-            }
+student_id,
+full_name,
+email,
+phone,
+department,
+semester,
+dob,
+gender
 
 
-            res.json({
-                message:"Student Added",
-                id:this.lastID
-            });
+}=req.body;
 
-        }
-    );
+
+
+db.run(
+
+`
+
+INSERT INTO students
+
+(student_id,full_name,email,phone,department,semester,dob,gender)
+
+VALUES(?,?,?,?,?,?,?,?)
+
+`,
+
+[
+
+student_id,
+full_name,
+email,
+phone,
+department,
+semester,
+dob,
+gender
+
+],
+
+
+function(err){
+
+
+if(err){
+
+return res.json({
+
+error:err.message
+
+});
+
+}
+
+
+res.json({
+
+message:"Student Added",
+
+id:this.lastID
+
+});
+
+
+});
+
 
 });
 
 
 
 
-// VIEW ALL STUDENTS
-
-app.get("/students", (req,res)=>{
 
 
-    db.all(
-        "SELECT * FROM students",
-
-        [],
-
-        (err,rows)=>{
-
-            if(err){
-                return res.status(400).json({
-                    error:err.message
-                });
-            }
 
 
-            res.json(rows);
 
-        }
+// EDIT STUDENT
 
-    );
+
+app.put("/students/:id",(req,res)=>{
+
+
+const id=req.params.id;
+
+
+const {
+
+full_name
+
+}=req.body;
+
+
+
+db.run(
+
+`
+
+UPDATE students
+
+SET full_name=?
+
+WHERE id=?
+
+`,
+
+[
+
+full_name,
+
+id
+
+],
+
+
+function(err){
+
+
+if(err){
+
+return res.json({
+
+error:err.message
+
+});
+
+}
+
+
+
+res.json({
+
+message:"Student Updated"
+
+});
 
 
 });
+
+
+});
+
+
+
+
 
 
 
@@ -109,32 +220,44 @@ app.get("/students", (req,res)=>{
 
 // DELETE STUDENT
 
+
 app.delete("/students/:id",(req,res)=>{
 
 
-    db.run(
-
-        "DELETE FROM students WHERE id=?",
-
-        [req.params.id],
-
-        function(err){
-
-            if(err){
-                return res.status(400).json({
-                    error:err.message
-                });
-            }
+const id=req.params.id;
 
 
-            res.json({
-                message:"Student Deleted"
-            });
+
+db.run(
+
+"DELETE FROM students WHERE id=?",
+
+[id],
 
 
-        }
+function(err){
 
-    );
+
+if(err){
+
+return res.json({
+
+error:err.message
+
+});
+
+}
+
+
+
+res.json({
+
+message:"Student Deleted"
+
+});
+
+
+});
 
 
 });
@@ -143,10 +266,13 @@ app.delete("/students/:id",(req,res)=>{
 
 
 
-// START SERVER
+
+
 
 app.listen(5000,()=>{
 
-    console.log("Server running on port 5000");
+
+console.log("Server running on port 5000");
+
 
 });
