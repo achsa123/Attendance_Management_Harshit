@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Add Student</title>
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+<div class="main">
+
+
+<h1>Add Student</h1>
+
+
+
+<form id="studentForm">
+
+
+<input id="student_id" type="text" placeholder="Student ID" required>
+
+
+<input id="full_name" type="text" placeholder="Full Name" required>
+
+
+<input id="email" type="email" placeholder="Email Address" required>
+
+
+<input id="phone" type="text" placeholder="Phone Number" required>
+
+
+<input id="department" type="text" placeholder="Department" required>
+
+
+<input id="semester" type="number" placeholder="Semester (1-8)" required>
+
+
+<input id="dob" type="date" required>
+
+
+
+<select id="gender">
+
+<option>Male</option>
+
+<option>Female</option>
+
+<option>Other</option>
+
+</select>
+
+
+
+<button type="submit">
+Add Student
+</button>
+
+
+</form>
+
+
+</div>
+
+
+
+<script>
+
+
+document.getElementById("studentForm").addEventListener("submit", function(e){
+
+
+e.preventDefault();
+
+
+
+fetch("http://localhost:5000/students", {
+
+
+method:"POST",
+
+
+headers:{
+
+"Content-Type":"application/json"
+
+},
+
+
+
+body:JSON.stringify({
+
+
+student_id:document.getElementById("student_id").value,
+
+full_name:document.getElementById("full_name").value,
+
+email:document.getElementById("email").value,
+
+phone:document.getElementById("phone").value,
+
+department:document.getElementById("department").value,
+
+semester:document.getElementById("semester").value,
+
+dob:document.getElementById("dob").value,
+
+gender:document.getElementById("gender").value
+
+
+})
+
+
+})
+
+
+.then(res=>res.json())
+
+.then(data=>{
+
+
+alert("Student Added Successfully");
+
+
+console.log(data);
+
+
+});
+
+
+});
+
+
+</script>
+
+
+
+</body>
+
+</html>

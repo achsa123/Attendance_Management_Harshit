@@ -1,0 +1,129 @@
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:#f4f6f9;
+}
+
+
+.dashboard{
+    display:flex;
+    min-height:100vh;
+}
+
+
+/* Sidebar */
+
+.sidebar{
+
+    width:230px;
+    background:#1e293b;
+    color:white;
+    padding:25px;
+
+}
+
+
+.sidebar h2{
+
+    text-align:center;
+
+}
+
+
+.sidebar button{
+
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:15px;
+
+}
+
+
+
+/* Dashboard */
+
+.main{
+
+    flex:1;
+    padding:40px;
+    text-align:center;
+
+}
+
+
+
+.cards{
+
+    display:flex;
+    justify-content:center;
+    gap:25px;
+    margin-top:40px;
+    flex-wrap:wrap;
+
+}
+
+
+
+.card{
+
+    background:white;
+    width:220px;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+
+}
+
+
+
+.card p{
+
+    font-size:32px;
+    font-weight:bold;
+
+}
+
+
+
+/* Add Student Form */
+
+form{
+
+    background:white;
+    width:400px;
+    margin:40px auto;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+
+}
+
+
+
+form input,
+form select{
+
+    width:90%;
+    padding:12px;
+    margin:10px;
+    border:1px solid #ccc;
+    border-radius:8px;
+
+}
+
+
+
+form button{
+
+    padding:12px 30px;
+    background:#1e293b;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+
+}
