@@ -3,97 +3,372 @@
 
 <head>
 
-    <title>View Students</title>
+<title>View Students</title>
 
-    <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css">
 
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 </head>
 
+
 <body>
+
 
 <div class="layout">
 
-    <div class="sidebar">
 
-        <h2>College App</h2>
+<div class="sidebar">
 
-        <ul>
 
-            <li onclick="location.href='dashboard.html'">
-                <i class="fa-solid fa-house"></i>
-                Dashboard
-            </li>
+<h2>College App</h2>
 
-            <li onclick="location.href='add-student.html'">
-                <i class="fa-solid fa-user-plus"></i>
-                Add Student
-            </li>
 
-            <li onclick="location.href='view-students.html'">
-                <i class="fa-solid fa-users"></i>
-                View Students
-            </li>
+<ul>
 
-            <li onclick="location.href='attendance.html'">
-                <i class="fa-solid fa-clipboard-check"></i>
-                Attendance
-            </li>
 
-            <li onclick="location.href='attendance-history.html'">
-                <i class="fa-solid fa-clock-rotate-left"></i>
-                Attendance History
-            </li>
+<li onclick="location.href='dashboard.html'">
+<i class="fa-solid fa-house"></i>
+Dashboard
+</li>
 
-        </ul>
 
-    </div>
+<li onclick="location.href='add-student.html'">
+<i class="fa-solid fa-user-plus"></i>
+Add Student
+</li>
 
-    <div class="main">
 
-        <h1>Students</h1>
+<li onclick="location.href='view-students.html'">
+<i class="fa-solid fa-users"></i>
+View Students
+</li>
 
-        <input
-            type="text"
-            id="search"
-            placeholder="🔍 Search Student..."
-            onkeyup="searchStudents()">
 
-        <br><br>
+<li onclick="location.href='attendance.html'">
+<i class="fa-solid fa-clipboard-check"></i>
+Attendance
+</li>
 
-        <table>
 
-            <thead>
+</ul>
 
-                <tr>
-
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Department</th>
-                    <th>Semester</th>
-                    <th>DOB</th>
-                    <th>Gender</th>
-                    <th>Actions</th>
-
-                </tr>
-
-            </thead>
-
-            <tbody id="studentTable">
-
-            </tbody>
-
-        </table>
-
-    </div>
 
 </div>
 
-<script src="studentview.js"></script>
+
+
+
+
+<div class="main">
+
+
+<h1>Students List</h1>
+
+
+
+<div class="card">
+
+
+<table border="1" width="100%">
+
+
+<thead>
+
+<tr>
+
+<th>ID</th>
+
+<th>Name</th>
+
+<th>Email</th>
+
+<th>Phone</th>
+
+<th>Department</th>
+
+<th>Semester</th>
+
+<th>DOB</th>
+
+<th>Gender</th>
+
+<th>Actions</th>
+
+</tr>
+
+
+</thead>
+
+
+
+<tbody id="studentTableBody">
+
+
+</tbody>
+
+
+</table>
+
+
+
+</div>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+<script>
+
+
+function loadStudents(){
+
+
+fetch("http://localhost:5000/students")
+
+
+.then(response=>response.json())
+
+
+.then(students=>{
+
+
+let table=document.getElementById("studentTableBody");
+
+
+table.innerHTML="";
+
+
+
+students.forEach(student=>{
+
+
+table.innerHTML += `
+
+
+<tr>
+
+
+<td>${student.student_id}</td>
+
+
+<td>${student.full_name}</td>
+
+
+<td>${student.email}</td>
+
+
+<td>${student.phone}</td>
+
+
+<td>${student.department}</td>
+
+
+<td>${student.semester}</td>
+
+
+<td>${student.dob}</td>
+
+
+<td>${student.gender}</td>
+
+
+
+<td>
+
+
+<button onclick="editStudent('${student.student_id}')">
+
+Edit
+
+</button>
+
+
+
+<button onclick="deleteStudent('${student.student_id}')">
+
+Delete
+
+</button>
+
+
+</td>
+
+
+
+</tr>
+
+
+`;
+
+
+});
+
+
+})
+
+
+.catch(error=>{
+
+console.log(error);
+
+});
+
+
+
+}
+
+
+
+
+
+
+
+
+function deleteStudent(id){
+
+
+if(confirm("Are you sure you want to delete?")){
+
+
+fetch(`http://localhost:5000/students/${id}`,{
+
+
+method:"DELETE"
+
+
+})
+
+
+.then(response=>response.json())
+
+
+.then(data=>{
+
+
+alert("Student Deleted Successfully");
+
+
+loadStudents();
+
+
+})
+
+
+.catch(error=>console.log(error));
+
+
+
+}
+
+
+
+}
+
+
+
+
+
+
+
+
+
+function editStudent(id){
+
+
+
+let name = prompt("Enter new name");
+
+
+let email = prompt("Enter new email");
+
+
+
+fetch(`http://localhost:5000/students/${id}`,{
+
+
+method:"PUT",
+
+
+headers:{
+
+
+"Content-Type":"application/json"
+
+
+},
+
+
+body:JSON.stringify({
+
+
+full_name:name,
+
+email:email,
+
+phone:"",
+
+department:"",
+
+semester:"",
+
+dob:"",
+
+gender:""
+
+
+})
+
+
+})
+
+
+
+.then(response=>response.json())
+
+
+.then(data=>{
+
+
+alert("Student Updated Successfully");
+
+
+loadStudents();
+
+
+})
+
+
+.catch(error=>console.log(error));
+
+
+
+}
+
+
+
+
+
+
+loadStudents();
+
+
+
+</script>
+
+
+
 
 </body>
 

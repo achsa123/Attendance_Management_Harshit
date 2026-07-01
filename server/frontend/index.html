@@ -1,110 +1,211 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>College App Dashboard</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+
 <body>
 
 
 <div class="layout">
 
 
-    <!-- SIDEBAR -->
 
-    <div class="sidebar">
+<!-- SIDEBAR -->
 
-
-        <h2>College App</h2>
+<div class="sidebar">
 
 
-        <ul>
-
-            <li>🏠 Dashboard</li>
-
-            <li>👨‍🎓 Students</li>
-
-            <li>📋 Attendance</li>
-
-            <li>⚙ Settings</li>
-
-        </ul>
+<h2>College App</h2>
 
 
-    </div>
+<ul>
+
+<li>🏠 Dashboard</li>
+
+<li>👨‍🎓 Students</li>
+
+<li>📋 Attendance</li>
+
+<li>⚙ Settings</li>
 
 
-
-    <!-- MAIN CONTENT -->
-
-
-    <div class="main">
+</ul>
 
 
-        <h1>Student Dashboard</h1>
+</div>
 
 
 
-        <div class="cards">
 
 
-            <div class="card">
-
-                <h2>Total Students</h2>
-
-                <p id="studentCount">0</p>
-
-            </div>
+<!-- MAIN -->
 
 
+<div class="main">
 
-            <div class="card">
 
-                <h2>Present Today</h2>
-
-                <p>0</p>
-
-            </div>
+<h1>Student Dashboard</h1>
 
 
 
-            <div class="card">
 
-                <h2>Absent Today</h2>
-
-                <p>0</p>
-
-            </div>
+<!-- CARDS -->
 
 
-
-            <div class="card">
-
-                <h2>Total Attendance</h2>
-
-                <p>0</p>
-
-            </div>
+<div class="cards">
 
 
-        </div>
+<div class="card">
+
+<h2>Total Students</h2>
+
+<p id="studentCount">0</p>
+
+
+</div>
 
 
 
-        <br><br>
+<div class="card">
+
+<h2>Present Today</h2>
+
+<p id="presentCount">0</p>
+
+
+</div>
 
 
 
-        <button onclick="location.href='addstudent.html'">
 
-            + Add Student
+<div class="card">
 
-        </button>
+<h2>Absent Today</h2>
+
+<p id="absentCount">0</p>
+
+
+</div>
 
 
 
-    </div>
+
+<div class="card">
+
+<h2>Total Attendance</h2>
+
+<p id="attendanceCount">0</p>
+
+
+</div>
 
 
 
 </div>
 
 
+
+
+
+<br><br>
+
+
+
+
+
+<button onclick="location.href='addstudent.html'">
+
+
++ Add Student
+
+
+</button>
+
+
+
+
+
+<br><br>
+
+
+
+
+
+<h2>Students List</h2>
+
+
+
+
+
+<table border="1">
+
+
+<thead>
+
+
+<tr>
+
+
+<th>Student ID</th>
+
+<th>Name</th>
+
+<th>Email</th>
+
+<th>Department</th>
+
+<th>Action</th>
+
+
+</tr>
+
+
+</thead>
+
+
+
+
+
+<tbody id="studentTable">
+
+
+</tbody>
+
+
+
+
+
+</table>
+
+
+
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
 <script src="script.js"></script>
 
 
+
 </body>
+
+
+</html>

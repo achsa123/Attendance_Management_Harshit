@@ -1,21 +1,33 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 const db = require("./database");
+
 
 const app = express();
 
+const PORT = 5000;
+
+
+
 app.use(cors());
+
 app.use(express.json());
 
+app.use(express.static(path.join(__dirname,"frontend")));
 
 
-// HOME
+
+
+// open dashboard
 
 app.get("/",(req,res)=>{
 
-res.send("Student Attendance System Running");
+    res.redirect("/dashboard.html");
 
 });
+
+
 
 
 
@@ -25,26 +37,39 @@ res.send("Student Attendance System Running");
 app.get("/students",(req,res)=>{
 
 
-db.all(
+    db.all(
 
-"SELECT * FROM students",
+        "SELECT * FROM students",
 
-[],
-
-(err,rows)=>{
+        [],
 
 
-if(err)
-return res.json({error:err.message});
+        (err,rows)=>{
 
 
-res.json(rows);
+            if(err){
+
+                return res.status(500).json({
+
+                    error:err.message
+
+                });
+
+            }
+
+
+            res.json(rows);
+
+
+        }
+
+
+    );
 
 
 });
 
 
-});
 
 
 
@@ -54,22 +79,10 @@ res.json(rows);
 
 // ADD STUDENT
 
-
 app.post("/students",(req,res)=>{
 
 
-const {
-
-student_id,
-full_name,
-email,
-phone,
-department,
-semester,
-dob,
-gender
-
-}=req.body;
+const s=req.body;
 
 
 
@@ -79,14 +92,7 @@ db.run(
 
 INSERT INTO students
 
-(student_id,full_name,email,phone,department,semester,dob,gender)
-
-VALUES(?,?,?,?,?,?,?,?)
-
-`,
-
-[
-
+(
 student_id,
 full_name,
 email,
@@ -95,6 +101,23 @@ department,
 semester,
 dob,
 gender
+)
+
+VALUES(?,?,?,?,?,?,?,?)
+
+`,
+
+
+[
+
+s.student_id,
+s.full_name,
+s.email,
+s.phone,
+s.department,
+s.semester,
+s.dob,
+s.gender
 
 ],
 
@@ -102,8 +125,15 @@ gender
 function(err){
 
 
-if(err)
-return res.json({error:err.message});
+if(err){
+
+return res.status(500).json({
+
+error:err.message
+
+});
+
+}
 
 
 res.json({
@@ -113,7 +143,79 @@ message:"Student Added"
 });
 
 
+}
+
+
+);
+
+
+
 });
+
+
+
+
+
+
+
+
+
+// DELETE STUDENT
+
+app.delete("/students/:id",(req,res)=>{
+
+
+const id=req.params.id;
+
+
+
+db.run(
+
+`
+
+DELETE FROM students
+
+WHERE id=? OR student_id=?
+
+`,
+
+[id,id],
+
+
+function(err){
+
+
+
+if(err){
+
+
+return res.status(500).json({
+
+error:err.message
+
+});
+
+
+}
+
+
+
+res.json({
+
+message:"Student Deleted",
+
+changes:this.changes
+
+});
+
+
+
+}
+
+
+
+);
+
 
 
 });
@@ -128,14 +230,13 @@ message:"Student Added"
 
 // EDIT STUDENT
 
-
 app.put("/students/:id",(req,res)=>{
 
 
-let id=req.params.id;
+const id=req.params.id;
 
 
-let {full_name}=req.body;
+const s=req.body;
 
 
 
@@ -143,134 +244,89 @@ db.run(
 
 `
 
-UPDATE students
+UPDATE students SET
 
-SET full_name=?
 
-WHERE id=?
+full_name=?,
+
+email=?,
+
+phone=?,
+
+department=?,
+
+semester=?,
+
+dob=?,
+
+gender=?
+
+
+WHERE id=? OR student_id=?
+
 
 `,
 
-[full_name,id],
+
+[
+
+s.full_name,
+
+s.email,
+
+s.phone,
+
+s.department,
+
+s.semester,
+
+s.dob,
+
+s.gender,
+
+id,
+
+id
+
+],
+
 
 
 function(err){
 
 
-if(err)
-return res.json({error:err.message});
+
+if(err){
+
+
+return res.status(500).json({
+
+error:err.message
+
+});
+
+
+}
+
 
 
 res.json({
 
-message:"Student Updated"
+message:"Student Updated",
+
+changes:this.changes
 
 });
 
 
-});
 
-
-});
-
+}
 
 
 
+);
 
 
-
-
-
-// DELETE STUDENT
-app.delete("/students/:id",(req,res)=>{
-
-    let id=req.params.id;
-
-    db.run(
-
-        "DELETE FROM students WHERE id=?",
-
-        [id],
-
-        function(err){
-
-            if(err)
-                return res.json({error:err.message});
-
-            res.json({
-
-                message:"Student Deleted"
-
-            });
-
-        });
-
-});  
-
-
-// MARK ATTENDANCE
-
-app.post("/attendance", (req, res) => {
-
-    console.log("BODY RECEIVED:", req.body);
-
-    const {
-        student_id,
-        date,
-        status
-    } = req.body;
-
-    db.run(
-        `
-        INSERT INTO attendance
-        (student_id, date, status)
-        VALUES (?, ?, ?)
-        `,
-        [student_id, date, status],
-
-        function (err) {
-
-            if (err) {
-                console.log("SQL ERROR:", err.message);
-                return res.json({
-                    error: err.message
-                });
-            }
-
-            console.log("Attendance inserted!");
-
-            res.json({
-                message: "Attendance Marked"
-            });
-
-        }
-    );
-
-});
-
-
-// VIEW ATTENDANCE
-
-app.get("/attendance",(req,res)=>{
-
-    db.all(
-
-        `
-        SELECT * FROM attendance
-        `,
-
-        [],
-
-        (err,rows)=>{
-
-            if(err)
-                return res.json({error:err.message});
-
-            res.json(rows);
-
-        }
-
-    );
 
 });
 
@@ -281,3 +337,11 @@ app.get("/attendance",(req,res)=>{
 
 
 
+
+app.listen(PORT,()=>{
+
+
+console.log(`🚀 Server running at http://localhost:${PORT}`);
+
+
+});
