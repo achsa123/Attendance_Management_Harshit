@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>View Students</title>
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+<div class="main">
+
+
+<h1>Students List</h1>
+
+
+
+<table>
+
+
+<thead>
+
+<tr>
+
+<th>Student ID</th>
+<th>Name</th>
+<th>Department</th>
+<th>Semester</th>
+<th>Email</th>
+<th>Phone</th>
+<th>Actions</th>
+
+</tr>
+
+
+</thead>
+
+
+
+<tbody id="studentTable">
+
+
+</tbody>
+
+
+
+</table>
+
+
+</div>
+
+
+
+
+<script>
+
+
+fetch("http://localhost:5000/students")
+
+
+.then(res => res.json())
+
+
+.then(data => {
+
+
+let table = document.getElementById("studentTable");
+
+
+
+data.forEach(student => {
+
+
+
+table.innerHTML += `
+
+
+<tr>
+
+
+<td>${student.student_id}</td>
+
+
+<td>${student.full_name}</td>
+
+
+<td>${student.department}</td>
+
+
+<td>${student.semester}</td>
+
+
+<td>${student.email}</td>
+
+
+<td>${student.phone}</td>
+
+
+
+<td>
+
+<button>Edit</button>
+
+<button>Delete</button>
+
+
+</td>
+
+
+
+</tr>
+
+
+
+`;
+
+
+
+});
+
+
+})
+
+
+.catch(error => {
+
+
+console.log("Error loading students:", error);
+
+
+});
+
+
+
+</script>
+
+
+
+</body>
+
+</html>

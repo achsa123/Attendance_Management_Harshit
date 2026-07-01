@@ -127,3 +127,37 @@ form button{
     cursor:pointer;
 
 }
+table{
+
+width:90%;
+margin:30px auto;
+border-collapse:collapse;
+background:white;
+
+}
+
+
+th,td{
+
+padding:15px;
+border:1px solid #ddd;
+
+}
+
+
+th{
+
+background:#1e293b;
+color:white;
+
+}
+
+
+td button{
+
+padding:8px;
+border:none;
+border-radius:5px;
+cursor:pointer;
+
+}
