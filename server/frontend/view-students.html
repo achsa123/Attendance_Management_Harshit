@@ -18,6 +18,45 @@
 <h1>Students List</h1>
 
 
+<div class="filters">
+
+
+<input 
+type="text" 
+id="search"
+placeholder="Search by ID or Name"
+>
+
+
+<select id="department">
+
+<option value="">All Departments</option>
+<option value="CSE">CSE</option>
+<option value="ECE">ECE</option>
+<option value="EEE">EEE</option>
+
+</select>
+
+
+
+<select id="semester">
+
+<option value="">All Semester</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+<option value="8">8</option>
+
+</select>
+
+
+</div>
+
+
 
 <table>
 
@@ -47,7 +86,6 @@
 </tbody>
 
 
-
 </table>
 
 
@@ -55,25 +93,42 @@
 
 
 
-
 <script>
+
+
+let students = [];
 
 
 fetch("http://localhost:5000/students")
 
 
-.then(res => res.json())
+.then(res=>res.json())
 
 
-.then(data => {
+.then(data=>{
 
 
-let table = document.getElementById("studentTable");
+students = data;
+
+displayStudents(students);
+
+
+});
 
 
 
-data.forEach(student => {
 
+function displayStudents(data){
+
+
+let table=document.getElementById("studentTable");
+
+
+table.innerHTML="";
+
+
+
+data.forEach(student=>{
 
 
 table.innerHTML += `
@@ -84,21 +139,15 @@ table.innerHTML += `
 
 <td>${student.student_id}</td>
 
-
 <td>${student.full_name}</td>
-
 
 <td>${student.department}</td>
 
-
 <td>${student.semester}</td>
-
 
 <td>${student.email}</td>
 
-
 <td>${student.phone}</td>
-
 
 
 <td>
@@ -111,29 +160,78 @@ table.innerHTML += `
 </td>
 
 
-
 </tr>
-
 
 
 `;
 
 
+});
+
+
+}
+
+
+
+
+document.getElementById("search").addEventListener("keyup",filter);
+
+
+
+document.getElementById("department").addEventListener("change",filter);
+
+
+
+document.getElementById("semester").addEventListener("change",filter);
+
+
+
+
+function filter(){
+
+
+let search =
+document.getElementById("search").value.toLowerCase();
+
+
+let dept =
+document.getElementById("department").value;
+
+
+let sem =
+document.getElementById("semester").value;
+
+
+
+
+let result = students.filter(student=>{
+
+
+return (
+
+(student.student_id.toString().includes(search) ||
+student.full_name.toLowerCase().includes(search))
+
+&&
+
+(dept=="" || student.department==dept)
+
+&&
+
+(sem=="" || student.semester==sem)
+
+
+);
+
 
 });
 
 
-})
+
+displayStudents(result);
 
 
-.catch(error => {
-
-
-console.log("Error loading students:", error);
-
-
-});
-
+}
 
 
 </script>
