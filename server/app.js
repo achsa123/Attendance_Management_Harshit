@@ -11,12 +11,11 @@ app.use(express.json());
 
 // HOME
 
-app.get("/", (req,res)=>{
+app.get("/",(req,res)=>{
 
 res.send("Student Attendance System Running");
 
 });
-
 
 
 
@@ -35,15 +34,8 @@ db.all(
 (err,rows)=>{
 
 
-if(err){
-
-return res.json({
-
-error:err.message
-
-});
-
-}
+if(err)
+return res.json({error:err.message});
 
 
 res.json(rows);
@@ -68,7 +60,6 @@ app.post("/students",(req,res)=>{
 
 const {
 
-
 student_id,
 full_name,
 email,
@@ -77,7 +68,6 @@ department,
 semester,
 dob,
 gender
-
 
 }=req.body;
 
@@ -112,22 +102,13 @@ gender
 function(err){
 
 
-if(err){
-
-return res.json({
-
-error:err.message
-
-});
-
-}
+if(err)
+return res.json({error:err.message});
 
 
 res.json({
 
-message:"Student Added",
-
-id:this.lastID
+message:"Student Added"
 
 });
 
@@ -151,14 +132,10 @@ id:this.lastID
 app.put("/students/:id",(req,res)=>{
 
 
-const id=req.params.id;
+let id=req.params.id;
 
 
-const {
-
-full_name
-
-}=req.body;
+let {full_name}=req.body;
 
 
 
@@ -174,28 +151,14 @@ WHERE id=?
 
 `,
 
-[
-
-full_name,
-
-id
-
-],
+[full_name,id],
 
 
 function(err){
 
 
-if(err){
-
-return res.json({
-
-error:err.message
-
-});
-
-}
-
+if(err)
+return res.json({error:err.message});
 
 
 res.json({
@@ -224,7 +187,7 @@ message:"Student Updated"
 app.delete("/students/:id",(req,res)=>{
 
 
-const id=req.params.id;
+let id=req.params.id;
 
 
 
@@ -238,16 +201,8 @@ db.run(
 function(err){
 
 
-if(err){
-
-return res.json({
-
-error:err.message
-
-});
-
-}
-
+if(err)
+return res.json({error:err.message});
 
 
 res.json({
@@ -255,6 +210,106 @@ res.json({
 message:"Student Deleted"
 
 });
+
+
+});
+
+
+});
+
+
+
+
+
+
+
+
+
+// MARK ATTENDANCE
+
+
+app.post("/attendance",(req,res)=>{
+
+
+const {
+
+student_id,
+
+date,
+
+status
+
+}=req.body;
+
+
+
+db.run(
+
+`
+
+INSERT INTO attendance
+
+(student_id,date,status)
+
+VALUES(?,?,?)
+
+`,
+
+[student_id,date,status],
+
+
+function(err){
+
+
+if(err)
+return res.json({error:err.message});
+
+
+
+res.json({
+
+message:"Attendance Marked"
+
+});
+
+
+});
+
+
+});
+
+
+
+
+
+
+
+
+
+// VIEW ATTENDANCE
+
+
+app.get("/attendance",(req,res)=>{
+
+
+db.all(
+
+`
+
+SELECT * FROM attendance
+
+`,
+
+[],
+
+(err,rows)=>{
+
+
+if(err)
+return res.json({error:err.message});
+
+
+res.json(rows);
 
 
 });
